@@ -12,6 +12,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     TextView la_register;
@@ -75,25 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Please fill out both fields", Toast.LENGTH_LONG).show();
                 } else {
                     //validate the credentials
-                    isValid = validate(inputUser, inputPassword);
-
-                    //if credentials are not valid
-                    if(!isValid)
-                    {
-                        Toast.makeText(LoginActivity.this, "Invalid Credentials, Please try again!", Toast.LENGTH_LONG).show();
-                    }
-                    else {
-                        //Login was successful
-                        Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
-
-                        //save 'Remember Me' in saved preferences if checked.
-                        sharedPreferencesEditor.putBoolean("RememberMeCheckbox", la_Remember.isChecked());
-                        sharedPreferencesEditor.apply();
-
-                        //go to MainActivity
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
+                    validate(inputUser, inputPassword);
                 }
             }
         });
@@ -109,19 +101,85 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+
     //This method will validate the username and password
+
+    /*
     private boolean validate(String name, String password)
     {
         //if the credentials are created
         if(RegistrationActivity.credentials != null){
+            requestCheckUser(name, password);
 
             //validate the username and password
             if(name.equals(RegistrationActivity.credentials.getUsername()) && password.equals(RegistrationActivity.credentials.getPassword()))
             {
                 return true;
             }
+
+
+
+
         }
 
         return false;
+    }
+
+     */
+
+    private void validate(String username, String password){
+        // Instantiate the RequestQueue.
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JSONObject object = new JSONObject();
+        try {
+            //input your API parameters
+            object.put("username",username);
+            object.put("password_hash",password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        // Enter the correct url for your api service site
+        //String url = getResources().getString(R.string.url);
+        String url = "http://mymovies.nylahtay.com/api/validate_users.php";
+
+        //Create the Request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //output the response to a new User object.
+
+                        String stringResponse = "String Response : "+ response.toString();
+                        Toast.makeText(LoginActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+
+                        //later we will set this to check for response
+                        isValid = true;
+
+                        if (isValid){
+                            //Login was successful
+                            Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
+
+                            //save 'Remember Me' in saved preferences if checked.
+                            sharedPreferencesEditor.putBoolean("RememberMeCheckbox", la_Remember.isChecked());
+                            sharedPreferencesEditor.apply();
+
+                            //go to MainActivity
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                                Toast.makeText(LoginActivity.this, "Invalid Credentials, Please try again!", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String stringResponse = "Error getting response" + error;
+                Toast.makeText(LoginActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
     }
 }
