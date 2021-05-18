@@ -28,7 +28,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button buttonRegister;
 
     public static Credentials credentials;
-    //public static User user;
+    public static User user;
 
     //add variables for Shared Preferences
     SharedPreferences sharedPreferences;
@@ -70,6 +70,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 {
                     //create the new credentials
                     credentials = new Credentials(regUsername, regPassword);
+                    user = new User(credentials, regFirst, regLast, "0");
 
                     //Store the credentials in Shared Preferences
                     sharedPreferencesEditor.putString("Username", regUsername);

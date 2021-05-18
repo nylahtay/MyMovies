@@ -17,4 +17,6 @@
     <string name="textPasswordVerify">Reenter Password</string>
     <string name="textRegister">Submit</string>
     <string name="textRememberMe">Remember Me</string>
+    <string name="textUsersName">User\'s Name</string>
+    <string name="textUsersEmail">User\'s Email</string>
 </resources>

@@ -62,8 +62,6 @@ public class LoginActivity extends AppCompatActivity {
             String savedUsername = sharedPreferences.getString("Username", "");
             String savedPassword = sharedPreferences.getString("Password", "");
 
-            RegistrationActivity.credentials = new Credentials(savedUsername, savedPassword);
-
             //if remember me was checked before, pre-populate the username and password
             if (sharedPreferences.getBoolean("RememberMeCheckbox", false))
             {
@@ -104,31 +102,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    //This method will validate the username and password
-
-    /*
-    private boolean validate(String name, String password)
-    {
-        //if the credentials are created
-        if(RegistrationActivity.credentials != null){
-            requestCheckUser(name, password);
-
-            //validate the username and password
-            if(name.equals(RegistrationActivity.credentials.getUsername()) && password.equals(RegistrationActivity.credentials.getPassword()))
-            {
-                return true;
-            }
-
-
-
-
-        }
-
-        return false;
-    }
-
-     */
-
     private void validate(String username, String password){
         // Instantiate the RequestQueue.
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -152,13 +125,27 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         //output the response to a new User object.
-                        JSONArray user_data = new JSONArray();
-                        String stringResponse = "String Response : "+ response.toString();
-                        Toast.makeText(LoginActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+                        JSONObject user_data;
 
                         try {
                             isValid = response.getBoolean("validate");
-                            user_data = response.getJSONArray("user_data");
+
+                            //get the user data
+                            user_data = response.getJSONObject("user_data");
+                            //save the userdata to RegistrationActivity instead of sharedPreferences as this is user info.
+                            RegistrationActivity.user = new User(
+                                    username,
+                                    password,
+                                    user_data.getString("first"),
+                                    user_data.getString("last"),
+                                    user_data.getString("auth")
+                            );
+
+
+                            String stringResponse = "String Response | First: " + RegistrationActivity.user.getFirstName() +" Last: "+ RegistrationActivity.user.getLastName();
+                            Toast.makeText(LoginActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

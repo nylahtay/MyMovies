@@ -3,6 +3,8 @@ package com.example.mymovies;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -18,6 +20,10 @@ import androidx.appcompat.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView fullName, username;
+    ImageView userImage;
+
+
     private AppBarConfiguration mAppBarConfiguration;
 
     @Override
@@ -30,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //todo start search activity.
+                
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -45,6 +53,16 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        //set navigation menu user info
+        View headerView = navigationView.getHeaderView(0);
+        fullName = headerView.findViewById(R.id.textviewHeaderMain_userFullName);
+        username = headerView.findViewById(R.id.textviewHeaderMain_username);
+        userImage =  headerView.findViewById(R.id.imageView_HeaderMain_userImage);
+        String full = RegistrationActivity.user.getFirstName() + " " + RegistrationActivity.user.getLastName();
+        fullName.setText(full);
+        username.setText(RegistrationActivity.user.getCredentials().getUsername());
+
     }
 
     @Override
