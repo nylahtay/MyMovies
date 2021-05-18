@@ -82,9 +82,6 @@ public class SearchActivity extends AppCompatActivity {
 
         //make sure search bar is not empty
         if(!searchBar.getText().toString().isEmpty()){
-            //String message = "Loading"+searchBar.getText().toString();
-            //Toast.makeText(SearchActivity.this, message, Toast.LENGTH_LONG).show();
-
 
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
@@ -94,9 +91,6 @@ public class SearchActivity extends AppCompatActivity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            String stringResponse = "String Response : "+ response.toString();
-                            Toast.makeText(SearchActivity.this, stringResponse, Toast.LENGTH_LONG).show();
-
                             try {
                                 JSONArray data = response.getJSONArray("results");
                                 String[] titles = new String[data.length()];
@@ -120,6 +114,7 @@ public class SearchActivity extends AppCompatActivity {
                                     movies[i] = movie;
                                 }
 
+                                //populate the layout
                                 populateLayout(movies);
                             } catch (JSONException e) {
                                 e.printStackTrace();
