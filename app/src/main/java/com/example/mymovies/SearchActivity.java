@@ -39,7 +39,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         searchBar = findViewById(R.id.editText_Search_title);
-
+        layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
         CountDownTimer timer = new CountDownTimer(800,200) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -57,7 +57,12 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 //todo show loading icon
-
+                /*
+                if(icon not showing)
+                {
+                    show icon
+                }
+                 */
                 //restart timer
                 timer.cancel();
                 timer.start();
@@ -78,7 +83,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void getMovies() {
-        Toast.makeText(getApplicationContext(),"Loading Movies", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(),"Loading Movies", Toast.LENGTH_LONG).show();
 
         //make sure search bar is not empty
         if(!searchBar.getText().toString().isEmpty()){
@@ -135,7 +140,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void populateLayout(Movie[] movies){
 
-        layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
+        layout.removeAllViews();
 
         for(int i=0;i<movies.length;i++) {
             Movie movie = movies[i];
