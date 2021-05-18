@@ -78,7 +78,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void getMovies() {
-
+        Toast.makeText(getApplicationContext(),"Loading Movies", Toast.LENGTH_LONG).show();
 
         //make sure search bar is not empty
         if(!searchBar.getText().toString().isEmpty()){
@@ -153,7 +153,7 @@ public class SearchActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     //launch the other activity using the img and url to populate the activity.
-                    //Intent intent = new Intent(getApplicationContext(), Details.class);
+                    Intent intent = new Intent(getApplicationContext(), MovieDetailsActivity.class);
 
                     //create movieInfo array to send to the details activity
                     String[] movieInfo = new String[3];
@@ -162,8 +162,8 @@ public class SearchActivity extends AppCompatActivity {
                     movieInfo[2] = movie.getDesc();
 
                     //putExtra only allows one value so I am using an array instead.
-                    //intent.putExtra("MovieInfo", movieInfo);
-                    //startActivity(intent);
+                    intent.putExtra("MovieInfo", movieInfo);
+                    startActivity(intent);
                 }
             });
 
