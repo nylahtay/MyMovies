@@ -11,16 +11,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RegistrationActivity extends AppCompatActivity {
 
     private EditText etRegUser, etRegPass, etRegPassVerify;
     private Button buttonRegister;
 
     public static Credentials credentials;
+    //public static User user;
 
     //add variables for Shared Preferences
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedPreferencesEditor;
+
+    boolean isValid = false;
 
 
     @Override
@@ -47,22 +61,29 @@ public class RegistrationActivity extends AppCompatActivity {
                 String regUsername = etRegUser.getText().toString();
                 String regPassword = etRegPass.getText().toString();
                 String regPassVerify = etRegPassVerify.getText().toString();
+                String regFirst = "";
+                String regLast = "";
+
 
                 //validate the inputs
                 if(validate(regUsername, regPassword, regPassVerify))
                 {
                     //create the new credentials
                     credentials = new Credentials(regUsername, regPassword);
-                    startActivity(new Intent(RegistrationActivity.this, LoginActivity.class));
 
                     //Store the credentials in Shared Preferences
                     sharedPreferencesEditor.putString("Username", regUsername);
                     sharedPreferencesEditor.putString("Password", regPassword);
+                    sharedPreferencesEditor.putString("FirstName", regFirst);
+                    sharedPreferencesEditor.putString("LastName", regLast);
+                    sharedPreferencesEditor.putString("UserAuth", "0");
+
+
+                    registerOnline(regUsername, regPassword, regFirst, regLast);
+
+
 
                     sharedPreferencesEditor.apply();
-
-                    //Toast for successful Registration
-                    Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
 
                 }
 
@@ -108,4 +129,68 @@ public class RegistrationActivity extends AppCompatActivity {
 
         return true;
     };
+
+
+    private void registerOnline(String username, String password, String first, String last){
+        // Instantiate the RequestQueue.
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JSONObject object = new JSONObject();
+        try {
+            //input your API parameters
+            object.put("username", username);
+            object.put("password_hash", password);
+            object.put("first", first);
+            object.put("last", last);
+            object.put("auth", "0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //todo add url to strings
+        // Enter the correct url for your api service site
+        //String url = getResources().getString(R.string.url);
+        String url = "http://mymovies.nylahtay.com/api/create_users.php";
+
+        //Create the Request
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String stringResponse = "String Response : "+ response.toString();
+                        Toast.makeText(RegistrationActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+
+                        //create a string to hold the returned sql error if user is not added to db table
+                        String userCreateError = "";
+                        try {
+                            isValid = response.getBoolean("user_created");
+                            userCreateError = response.getString("error");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
+                        //Check to see if registration was a success
+                        if (isValid){
+                            //Registration successful
+                            Toast.makeText(RegistrationActivity.this, "Registration Successful!", Toast.LENGTH_LONG).show();
+
+                            //go to MainActivity
+                            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                        else{
+                            Toast.makeText(RegistrationActivity.this, userCreateError, Toast.LENGTH_LONG).show();
+                        }
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                String stringResponse = "Error getting response" + error;
+                Toast.makeText(RegistrationActivity.this, stringResponse, Toast.LENGTH_LONG).show();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
 }

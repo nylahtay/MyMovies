@@ -19,6 +19,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
         //SIGN UP text is clicked
         la_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,6 +141,7 @@ public class LoginActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        //todo add url to strings
         // Enter the correct url for your api service site
         //String url = getResources().getString(R.string.url);
         String url = "http://mymovies.nylahtay.com/api/validate_users.php";
@@ -149,13 +152,18 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         //output the response to a new User object.
-
+                        JSONArray user_data = new JSONArray();
                         String stringResponse = "String Response : "+ response.toString();
                         Toast.makeText(LoginActivity.this, stringResponse, Toast.LENGTH_LONG).show();
 
-                        //later we will set this to check for response
-                        isValid = true;
+                        try {
+                            isValid = response.getBoolean("validate");
+                            user_data = response.getJSONArray("user_data");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                        //later we will set this to check for response
                         if (isValid){
                             //Login was successful
                             Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
