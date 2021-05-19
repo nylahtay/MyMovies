@@ -13,7 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyMovies"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MovieDetailsActivity"></activity>
+        <activity android:name=".MovieDetailsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".SearchActivity" />
         <activity android:name=".RegistrationActivity">
             <meta-data
