@@ -10,7 +10,7 @@
 
     <string name="menu_home">Explore</string>
     <string name="menu_lists">Lists</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">Settings</string>
     <string name="TextPassword">Password</string>
     <string name="TextUsername">Email / Username</string>
     <string name="textSignUp">- Sign Up -</string>

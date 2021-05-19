@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -33,16 +34,20 @@ public class SearchActivity extends AppCompatActivity {
     LinearLayout layout;
     EditText searchBar;
     Movie[] movies;
+    RelativeLayout loadingCircle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        loadingCircle = findViewById(R.id.loadingPanel);
+        loadingCircle.setVisibility(View.INVISIBLE);
 
         gridView =(GridView) findViewById(R.id.gridview_SearchActivity);
 
         searchBar = findViewById(R.id.editText_Search_title);
+        searchBar.requestFocus();
         //layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
         CountDownTimer timer = new CountDownTimer(800,200) {
             @Override
@@ -61,12 +66,7 @@ public class SearchActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 //todo show loading icon
-                /*
-                if(icon not showing)
-                {
-                    show icon
-                }
-                 */
+                loadingCircle.setVisibility(View.VISIBLE);
                 //restart timer
                 timer.cancel();
                 timer.start();
@@ -152,6 +152,9 @@ public class SearchActivity extends AppCompatActivity {
         //gridView.removeAllViews();
         MovieAdapter movieAdapter = new MovieAdapter(SearchActivity.this, movies);
         gridView.setAdapter(movieAdapter);
+
+        loadingCircle.setVisibility(View.INVISIBLE);
+
 
 
 
