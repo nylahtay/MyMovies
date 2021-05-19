@@ -49,7 +49,7 @@ public class SearchActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.editText_Search_title);
         searchBar.requestFocus();
         //layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
-        CountDownTimer timer = new CountDownTimer(800,200) {
+        CountDownTimer timer = new CountDownTimer(600,200) {
             @Override
             public void onTick(long millisUntilFinished) {
                 //do nothing
@@ -142,6 +142,11 @@ public class SearchActivity extends AppCompatActivity {
 
             // Add the request to the RequestQueue.
             queue.add(jsonObjRequest);
+        }
+        else {
+            //empty string change loading Circle back to invisible
+            loadingCircle.setVisibility(View.INVISIBLE);
+
         }
     }
 
