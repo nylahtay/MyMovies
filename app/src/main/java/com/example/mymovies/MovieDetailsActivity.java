@@ -4,9 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -45,5 +48,34 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+
+        getMenuInflater().inflate(R.menu.details, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()) {
+            case R.id.mShare:
+                Intent i = new Intent(
+                        Intent.ACTION_SEND
+                );
+                i.setType("text/plain");
+                i.putExtra(
+                        android.content.Intent.EXTRA_TEXT, "Check out this movie! "
+                );
+                startActivity(Intent.createChooser(
+                        i,
+                        "Share Via"
+                ));
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
