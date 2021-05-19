@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.mymovies.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_lists"
+        android:name="com.example.mymovies.ui.lists.ListsFragment"
+        android:label="@string/menu_lists"
+        tools:layout="@layout/fragment_lists" />
 
     <fragment
         android:id="@+id/nav_slideshow"

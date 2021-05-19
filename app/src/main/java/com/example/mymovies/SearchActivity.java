@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -28,7 +29,7 @@ import org.json.JSONObject;
 import java.util.Timer;
 
 public class SearchActivity extends AppCompatActivity {
-
+    GridView gridView;
     LinearLayout layout;
     EditText searchBar;
     Movie[] movies;
@@ -38,8 +39,11 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+
+        gridView =(GridView) findViewById(R.id.gridview_SearchActivity);
+
         searchBar = findViewById(R.id.editText_Search_title);
-        layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
+        //layout = (LinearLayout)findViewById(R.id.LinearLayout_searchListLayout);
         CountDownTimer timer = new CountDownTimer(800,200) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -81,6 +85,9 @@ public class SearchActivity extends AppCompatActivity {
         });
 
     }
+
+
+
 
     private void getMovies() {
         //Toast.makeText(getApplicationContext(),"Loading Movies", Toast.LENGTH_LONG).show();
@@ -138,7 +145,17 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+
+
+
     private void populateLayout(Movie[] movies){
+        //gridView.removeAllViews();
+        MovieAdapter movieAdapter = new MovieAdapter(SearchActivity.this, movies);
+        gridView.setAdapter(movieAdapter);
+
+
+
+        /*
 
         layout.removeAllViews();
 
@@ -177,6 +194,10 @@ public class SearchActivity extends AppCompatActivity {
 
             // Adds the view to the layout
             layout.addView(image);
+
+
+
         }
+        */
     }
 }

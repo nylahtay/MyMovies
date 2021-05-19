@@ -157,6 +157,8 @@ public class LoginActivity extends AppCompatActivity {
 
                             //save 'Remember Me' in saved preferences if checked.
                             sharedPreferencesEditor.putBoolean("RememberMeCheckbox", la_Remember.isChecked());
+                            sharedPreferencesEditor.putString("Username", username);
+                            sharedPreferencesEditor.putString("Password", password);
                             sharedPreferencesEditor.apply();
 
                             //go to MainActivity
