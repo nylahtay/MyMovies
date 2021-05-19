@@ -81,7 +81,7 @@ public class ListsFragment extends Fragment {
 
     //this method will add the
     public void addListToPage(Movie[] movies, String listName, int listID) {
-        //TODO create the horizontal Scroll View with a layout on the fly and assign it to the ListsLinearLayout
+        // create the horizontal Scroll View with a layout on the fly and assign it to the ListsLinearLayout
         HorizontalScrollView scrollView = new HorizontalScrollView(getActivity());
         //Create a listLayout
         LinearLayout listLayout = new LinearLayout(getActivity());
